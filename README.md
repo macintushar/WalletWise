@@ -2,11 +2,12 @@
 
 # TO-DO
 
-[ ] Add Authentication
-[ ] Add Dashboard
-[ ] Add ENV for Tables
-[ ] Add Transactions
-[ ] Add NLP-based new transaction
+- [ ] Add Authentication
+- [ ] Add Dashboard
+- [ ] Add Accounts
+- [ ] Add ENV for Tables
+- [ ] Add Transactions
+- [ ] Add NLP-based new transaction
 
 ## Built With
 
