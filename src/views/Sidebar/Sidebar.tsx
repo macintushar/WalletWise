@@ -1,83 +1,60 @@
 import { ModeToggle } from "@/components/mode-toggle";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { supabase } from "@/lib/supabase";
-import { User } from "@supabase/auth-js";
-import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
+import routes from "./routes";
+import Profile from "./Profile";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 
 function Sidebar(): JSX.Element {
-  const [user, setUser] = useState<User | null>();
-
-  useEffect(() => {
-    async function getUserData() {
-      const { data } = await supabase.auth.getUser();
-      setUser(data?.user);
-    }
-    getUserData();
-  }, []);
-
-  if (!user) return <div>Loading...</div>;
-
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      className="min-h-[200px] rounded-lg text-gray-900 dark:text-white"
-    >
-      <ResizablePanel defaultSize={10} minSize={5} maxSize={15}>
-        <div className="flex h-full p-6 flex-col justify-between text-white">
-          <div>
-            <nav>
-              <div className="flex w-full justify-center">
-                <img
-                  alt="WalletWise Logo"
-                  className="h-8"
-                  src="https://bzortqhjphsocjbvbxdq.supabase.co/storage/v1/object/public/public-assets/logos/WalletWise-Text.png?t=2024-05-26T19%3A36%3A29.801Z"
-                />
-              </div>
-              <ul>
-                <li>
-                  <a href="/dashboard">Dashboard</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div>
-            <nav>
-              <ul>
-                <li>
-                  <a href="/settings">Settings</a>
-                </li>
-                <li>
-                  <ModeToggle />
-                </li>
-                <li>
-                  <div className="w-full bg-gray-900 h-12 p-2 flex rounded-lg items-center">
-                    <img
-                      src={user.user_metadata.avatar_url}
-                      alt="profile"
-                      className="rounded-full h-8 w-8 mr-2"
-                    />
-                    <h2 className="truncate w-full">
-                      {user.user_metadata.name}
-                    </h2>
-                  </div>
-                </li>
-              </ul>
-            </nav>
-          </div>
+    <div className="flex flex-row h-screen">
+      <div className="flex h-full p-6 flex-col max-sm:hidden justify-between text-white w-24 max-w-[256px] bg-black">
+        <div>
+          <nav>
+            <div className="flex w-full justify-center">
+              <img
+                alt="WalletWise Logo"
+                className="h-8"
+                src="https://bzortqhjphsocjbvbxdq.supabase.co/storage/v1/object/public/public-assets/logos/WalletWise-Text.png?t=2024-05-26T19%3A36%3A29.801Z"
+              />
+            </div>
+            <ul>
+              {routes.map((route) => (
+                <a href={route.url} key={route.url}>
+                  <li className="h-11 w-full bg-zinc-800/30 flex px-3 py-2 items-center gap-2 rounded-lg">
+                    <route.icon className="h-8" />
+                  </li>
+                </a>
+              ))}
+            </ul>
+          </nav>
         </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={75}>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <a href="/settings">Settings</a>
+              </li>
+              <li>
+                <ModeToggle />
+              </li>
+              <li>
+                <Profile />
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div className="text-white">
+        <div className="dark:bg-zinc-900">
+          <Bars3Icon />
+        </div>
+      </div>
+      <div className="flex flex-col text-white">
         <div className="flex h-full items-center justify-center p-6">
           <Outlet />
         </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+      </div>
+    </div>
   );
 }
 

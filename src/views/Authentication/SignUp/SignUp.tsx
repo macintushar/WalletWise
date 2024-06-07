@@ -80,8 +80,8 @@ export function SignUp() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 h-screen">
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] bg-gray-200 dark:bg-gray-900 px-8 py-4 rounded-lg">
-        <h2 className="my-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] bg-zinc-200 dark:bg-zinc-900 px-8 py-4 rounded-lg">
+        <h2 className="my-6 text-center text-2xl font-bold leading-9 tracking-tight text-zinc-900 dark:text-white">
           Sign up for an account
         </h2>
         <Form {...form}>
@@ -148,11 +148,11 @@ export function SignUp() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-600"
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-3 block text-sm leading-6 text-gray-900 dark:text-gray-100"
+                  className="ml-3 block text-sm leading-6 text-zinc-900 dark:text-zinc-100"
                 >
                   Remember me
                 </label>
@@ -161,7 +161,7 @@ export function SignUp() {
               <div className="text-sm leading-6">
                 <a
                   href="#"
-                  className="font-semibold text-sm text-gray-600 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-200"
+                  className="font-semibold text-sm text-zinc-600 dark:text-zinc-100 hover:text-zinc-500 dark:hover:text-zinc-200"
                 >
                   Forgot password?
                 </a>

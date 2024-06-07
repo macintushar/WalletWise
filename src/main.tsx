@@ -19,13 +19,21 @@ import Sidebar from "./views/Sidebar";
 import SignUp from "./views/Authentication/SignUp";
 
 import "./index.css";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />}>
       <Route path="sign-in" element={<SignIn />} />
       <Route path="sign-up" element={<SignUp />} />
-      <Route path="/" element={<Sidebar />}>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Sidebar />
+          </ProtectedRoute>
+        }
+      >
         <Route path="dashboard" element={<Dashboard />} />
       </Route>
     </Route>
