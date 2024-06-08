@@ -1,8 +1,9 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { Outlet } from "react-router";
-import routes from "./routes";
+import routes from "../../constants/routes";
 import Profile from "./Profile";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import NavButton from "./NavButton";
 
 function Sidebar(): JSX.Element {
   return (
@@ -17,30 +18,20 @@ function Sidebar(): JSX.Element {
                 src="https://bzortqhjphsocjbvbxdq.supabase.co/storage/v1/object/public/public-assets/logos/WalletWise-Text.png?t=2024-05-26T19%3A36%3A29.801Z"
               />
             </div>
-            <ul>
+            <ul className="border-t mt-1 pt-2 gap-2 flex flex-col">
               {routes.map((route) => (
-                <a href={route.url} key={route.url}>
-                  <li className="h-11 w-full bg-zinc-800/30 flex px-3 py-2 items-center gap-2 rounded-lg">
-                    <route.icon className="h-8" />
-                  </li>
-                </a>
+                <li key={route.url}>
+                  <NavButton {...route} />
+                </li>
               ))}
             </ul>
           </nav>
         </div>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <a href="/settings">Settings</a>
-              </li>
-              <li>
-                <ModeToggle />
-              </li>
-              <li>
-                <Profile />
-              </li>
-            </ul>
+        <div className="border-t-2 w-full pt-20">
+          <nav className=" flex flex-col gap-2">
+            <a href="/settings">Settings</a>
+            <ModeToggle />
+            <Profile />
           </nav>
         </div>
       </div>

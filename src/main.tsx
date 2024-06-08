@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -13,13 +12,13 @@ import Layout from "./Layout";
 import { ThemeProvider } from "./components/theme-provider";
 import { Toaster } from "./components/ui/toaster";
 
-import Dashboard from "./views/Dashboard";
 import SignIn from "./views/Authentication/SignIn";
 import Sidebar from "./views/Sidebar";
 import SignUp from "./views/Authentication/SignUp";
 
 import "./index.css";
 import ProtectedRoute from "./ProtectedRoute";
+import routes from "./constants/routes";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,7 +33,9 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} />
+        {routes.map((route) => (
+          <Route path={route.url} key={route.url} element={<route.page />} />
+        ))}
       </Route>
     </Route>
   )
