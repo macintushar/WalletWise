@@ -1,4 +1,4 @@
-function Dashboard() {
+function Dashboard(): JSX.Element {
   return (
     <div>
       <h1 className="text-white">Dashboard</h1>
