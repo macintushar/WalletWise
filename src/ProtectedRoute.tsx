@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 
 interface ProtectedRouteProps {
@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -19,15 +19,20 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     };
 
     checkUser();
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        console.log("SIGNED_OUT", session);
+        setIsAuthenticated(false);
+      }
+    });
   }, []);
 
   if (isAuthenticated === null) {
-    // Render a loading indicator or null while checking authentication state
     return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/sign-in" state={{ from: location }} />;
+    navigate("/sign-in");
   }
 
   return children;
