@@ -18,7 +18,7 @@ import SignUp from "./views/Authentication/SignUp";
 
 import "./index.css";
 import ProtectedRoute from "./ProtectedRoute";
-import routes from "./constants/routes";
+import routes from "./constants/constants";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
