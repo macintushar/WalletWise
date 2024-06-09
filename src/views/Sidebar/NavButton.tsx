@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { RouteItem } from "../../constants/routes";
+import { RouteItem } from "../../constants/constants";
 
 function NavButton(routeItem: RouteItem) {
   return (
