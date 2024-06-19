@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabase";
+import Loader from "./components/Loader";
 
-interface ProtectedRouteProps {
+type ProtectedRouteProps = {
   children: JSX.Element;
-}
+};
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -19,16 +20,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     };
 
     checkUser();
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
-        console.log("SIGNED_OUT", session);
         setIsAuthenticated(false);
       }
     });
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (!isAuthenticated) {
