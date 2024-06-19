@@ -1,3 +1,4 @@
+import Accounts from "@/views/Accounts";
 import Dashboard from "@/views/Dashboard";
 import { Landmark, Home, Cog } from "lucide-react";
 
@@ -23,7 +24,7 @@ const routes: RouteItem[] = [
         url: '/accounts',
         name: 'Accounts',
         icon: Landmark,
-        page: Dashboard,
+        page: Accounts,
         position: "main"
     },
     {
