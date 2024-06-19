@@ -23,6 +23,7 @@ import { z } from "zod";
 import { PlusIcon } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 
 const formSchema = z.object({
   account_name: z.string().min(3, {
@@ -36,31 +37,13 @@ const formSchema = z.object({
   }),
 });
 
-async function handleAccountCreate(values: z.infer<typeof formSchema>) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const { error } = await supabase.from("walletwise_accounts").insert({
-    account_balance: values?.account_balance,
-    account_name: values?.account_name,
-    account_number: values?.account_number,
-    user_id: user?.id,
-  });
+type AddAccountProps = {
+  refetchAccountsFn: () => void;
+};
 
-  if (error) {
-    toast({
-      title: "An error occured while adding the account.",
-      description: error.message,
-      variant: "destructive",
-    });
-  }
+function AddAccount({ refetchAccountsFn }: AddAccountProps) {
+  const [open, setOpen] = useState(false);
 
-  toast({
-    title: `Successfully created account - ${values.account_name}`,
-  });
-}
-
-function AddAccount() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,13 +52,41 @@ function AddAccount() {
       account_balance: "0",
     },
   });
+
+  async function handleAccountCreate(values: z.infer<typeof formSchema>) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { error } = await supabase.from("walletwise_accounts").insert({
+      account_balance: values?.account_balance,
+      account_name: values?.account_name,
+      account_number: values?.account_number,
+      user_id: user?.id,
+    });
+
+    if (error) {
+      toast({
+        title: "An error occured while creating the account.",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+
+    toast({
+      title: `Successfully created account - ${values.account_name}`,
+    });
+    refetchAccountsFn();
+    setOpen(false);
+  }
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
-        <Button size="lg" className="flex flex-row space-x-2 items-center">
+        <div className="flex flex-row space-x-2 items-center bg-white text-black border-2 px-3 py-2 rounded-lg text-sm">
           <PlusIcon className="text-md h-4 w-4" />
           <h1 className="align-center">Add Account</h1>
-        </Button>
+        </div>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader className="mb-2">

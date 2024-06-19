@@ -30,7 +30,7 @@ export function AccountTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border w-4/5 mx-auto">
+    <div className="rounded-md border w-4/5 mx-auto text-black dark:text-white">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

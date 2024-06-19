@@ -5,10 +5,11 @@ import { columns } from "./columns";
 import { useQuery } from "@tanstack/react-query";
 import AddAccount from "./AddAccount";
 import Loader from "@/components/Loader";
+import Header from "../Header";
 
 function Accounts() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["accounts"],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["all-accounts"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("walletwise_accounts")
@@ -30,11 +31,9 @@ function Accounts() {
 
   return (
     <div className="w-full">
-      <h1 className="text-white text-center font-semibold text-3xl pb-4">
-        Accounts
-      </h1>
+      <Header title="Accounts" />
       <div className="flex justify-center sm:justify-end mt-2 mb-4">
-        <AddAccount />
+        <AddAccount refetchAccountsFn={refetch} />
       </div>
       <AccountTable columns={columns} data={data} />
     </div>
