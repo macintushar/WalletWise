@@ -5,14 +5,32 @@ import { Landmark, ReceiptIndianRupee } from "lucide-react";
 import Loader from "@/components/Loader";
 import { DashboardCardData } from "./types";
 import { toast } from "@/components/ui/use-toast";
+import Header from "../Header";
 
 function Dashboard(): JSX.Element {
+  const now = new Date();
+
+  const startOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1
+  ).toISOString();
+
+  // Get the first day of the next month
+  const startOfNextMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    1
+  ).toISOString();
+
   const { data: transactionData, isLoading: transactionIsLoading } = useQuery({
-    queryKey: ["transactions"],
+    queryKey: ["transactions", "dashboard", "current-month"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("walletwise_transactions")
-        .select("value");
+        .select("value")
+        .gte("created_at", startOfMonth)
+        .lt("created_at", startOfNextMonth);
 
       if (error) {
         toast({
@@ -25,12 +43,13 @@ function Dashboard(): JSX.Element {
     },
     refetchOnMount: false,
   });
+
   const { data: accountsData, isLoading: accountsIsLoading } = useQuery({
-    queryKey: ["accounts"],
+    queryKey: ["accounts", "count"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { count, error } = await supabase
         .from("walletwise_accounts")
-        .select("account_uuid");
+        .select("*", { count: "exact", head: true });
 
       if (error) {
         toast({
@@ -39,7 +58,7 @@ function Dashboard(): JSX.Element {
           variant: "destructive",
         });
       }
-      return data;
+      return count;
     },
     refetchOnMount: false,
   });
@@ -62,7 +81,7 @@ function Dashboard(): JSX.Element {
       icon: Landmark,
       name: "Accounts",
       description: "The bank accounts you have added",
-      value: accountsData?.length || 0,
+      value: accountsData || 0,
     },
     {
       icon: ReceiptIndianRupee,
@@ -74,9 +93,7 @@ function Dashboard(): JSX.Element {
 
   return (
     <div className="w-full">
-      <h1 className="text-white text-center font-semibold text-3xl pb-4">
-        Dashboard
-      </h1>
+      <Header title="Dashboard" />
       <div className="flex flex-row flex-wrap w-4/5 md:w-full gap-12 mx-auto justify-center">
         {dashboardCardData.map((data) => (
           <DashboardCard {...data} key={data.name} />
