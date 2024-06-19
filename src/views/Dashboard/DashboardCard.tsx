@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { DashboardCardData } from "./constants";
+import { DashboardCardData } from "./types";
 
 function DashboardCard(data: DashboardCardData) {
   return (
