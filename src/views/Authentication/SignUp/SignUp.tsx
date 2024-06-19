@@ -15,6 +15,8 @@ import { HiddenInput, Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const FormSchema = z
   .object({
@@ -35,6 +37,8 @@ const FormSchema = z
   });
 
 export function SignUp() {
+  const [signingUp, setSigningUp] = useState(false);
+
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -48,6 +52,8 @@ export function SignUp() {
   });
 
   async function onSubmit(formData: z.infer<typeof FormSchema>) {
+    setSigningUp(true);
+
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -60,16 +66,19 @@ export function SignUp() {
     });
 
     if (error) {
+      setSigningUp(false);
       toast({
         title: "Error",
         description: error.message,
       });
     } else if (!data.session) {
+      setSigningUp(false);
       toast({
         title: "Error",
         description: "An error occured, please try again later.",
       });
     } else {
+      setSigningUp(false);
       navigate("/");
       toast({
         title: "Success",
@@ -80,12 +89,12 @@ export function SignUp() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 h-screen">
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] bg-zinc-200 dark:bg-zinc-900 px-8 py-4 rounded-lg">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] bg-zinc-200/30 dark:bg-zinc-900/30 px-8 py-4 rounded-lg border-zinc-200/70 dark:border-zinc-900/70 border-2">
         <h2 className="my-6 text-center text-2xl font-bold leading-9 tracking-tight text-zinc-900 dark:text-white">
           Sign up for an account
         </h2>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -142,34 +151,20 @@ export function SignUp() {
                 </FormItem>
               )}
             />
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-600"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-3 block text-sm leading-6 text-zinc-900 dark:text-zinc-100"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm leading-6">
-                <a
-                  href="#"
-                  className="font-semibold text-sm text-zinc-600 dark:text-zinc-100 hover:text-zinc-500 dark:hover:text-zinc-200"
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              isLoading={signingUp}
+              loadingText="Signing Up..."
+            >
               Sign Up
             </Button>
+            <div className="mt-4 text-center text-sm">
+              Already have an account?{" "}
+              <Link to="/sign-in" className="underline">
+                Sign in
+              </Link>
+            </div>
           </form>
         </Form>
       </div>
