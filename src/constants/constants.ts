@@ -1,6 +1,7 @@
 import Accounts from "@/views/Accounts";
 import Dashboard from "@/views/Dashboard";
-import { Landmark, Home, Cog } from "lucide-react";
+import Transactions from "@/views/Transactions";
+import { Landmark, Home, Cog, ArrowLeftRight } from "lucide-react";
 
 export type Icon = React.ComponentType<React.ComponentProps<'svg'>>;
 
@@ -25,6 +26,13 @@ const routes: RouteItem[] = [
         name: 'Accounts',
         icon: Landmark,
         page: Accounts,
+        position: "main"
+    },
+    {
+        url: '/transactions',
+        name: 'Transactions',
+        icon: ArrowLeftRight,
+        page: Transactions,
         position: "main"
     },
     {
